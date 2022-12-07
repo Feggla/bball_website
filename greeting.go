@@ -18,6 +18,6 @@ func main() {
 	} else if now > 20 && now <= 7 {
 		time_of_day = "night time"
 	}
-
+	fmt.Print("This is an additoin to the feature branch")
 	fmt.Print("Hey, ",name,". The time is ", current_time, " and it is ", time_of_day, ".")
 }
