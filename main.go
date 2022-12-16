@@ -30,6 +30,17 @@ type Player struct {
 }
 
 func main() {
+	log_file := "error_log"
+	file, err := os.OpenFile(log_file, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0600)
+	if err != nil {
+		log.Println(err)
+	}
+	defer file.Close()
+
+	log.SetOutput(file)
+	log.SetFlags(log.Lshortfile | log.LstdFlags)
+	log.Println("Logging to custom file")
+
 	if len(os.Args) == 1 {
 		fmt.Println("Please select a basketball pos: G for Guard, C for Centre of F for Forward")
 		return
@@ -37,7 +48,7 @@ func main() {
 		input := os.Args[1]
 		allPlayers, err := GetAllPlayers()
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 		fmt.Println(len(allPlayers))
 		for _, p := range allPlayers {
@@ -55,7 +66,7 @@ func GetAllPlayers() ([]Player, error) {
 	for i := 1; i < 3; i++ {
 		url := fmt.Sprint("https://www.balldontlie.io/api/v1/players?page=", i)
 		resp, err := http.Get(url)
-		// TODO: Maybe don't exit on these errors, instead lets continue with api calls
+
 		if err != nil {
 			return nil, err
 		}
