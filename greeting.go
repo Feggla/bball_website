@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"time"
 	"os"
+	"time"
 )
 
 func main() {
@@ -19,5 +19,5 @@ func main() {
 		time_of_day = "night time"
 	}
 	fmt.Print("This is an additoin to the feature branch")
-	fmt.Print("Hey, ",name,". The time is ", current_time, " and it is ", time_of_day, ".")
+	fmt.Print("Hey, ", name, ". The time is ", current_time, " and it is ", time_of_day, ".")
 }
