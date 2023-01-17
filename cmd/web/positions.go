@@ -29,7 +29,7 @@ type Player struct {
 	Weight interface{} `json:"weight_pounds"`
 }
 
-func main() {
+func feedPlayers() {
 	log_file := "error_log"
 	file, err := os.OpenFile(log_file, os.O_APPEND|os.O_RDWR|os.O_CREATE, 0600)
 	if err != nil {
@@ -95,4 +95,47 @@ func GetAllPlayers() ([]Player, error) {
 		players = append(players, res.Data...)
 	}
 	return players, nil
+}
+
+func Guards() ([]Player, error) {
+	var guards []Player
+	all_players, err := GetAllPlayers()
+	if err != nil {
+		log.Println(err)
+	}
+	for _, p := range all_players {
+		if p.Position == string('G') {
+			guards = append(guards, p)
+
+		}
+
+	}
+	return guards, nil
+}
+
+func Centres() ([]Player, error) {
+	var centres []Player
+	all_players, err := GetAllPlayers()
+	if err != nil {
+		log.Println(err)
+	}
+	for _, p := range all_players {
+		if p.Position == string('C') || p.Position == string("C-F") {
+			centres = append(centres, p)
+		}
+	}
+	return centres, nil
+}
+func Forwards() ([]Player, error) {
+	var forwards []Player
+	all_players, err := GetAllPlayers()
+	if err != nil {
+		log.Println(err)
+	}
+	for _, p := range all_players {
+		if p.Position == string('F') || p.Position == string("C-F") {
+			forwards = append(forwards, p)
+		}
+	}
+	return forwards, nil
 }

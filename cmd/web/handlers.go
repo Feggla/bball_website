@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"net/url"
-	"strconv"
 )
 
 func home(w http.ResponseWriter, r *http.Request) {
@@ -19,6 +18,8 @@ func home(w http.ResponseWriter, r *http.Request) {
 		"./ui/html/base.tmpl.html",
 		"./ui/html/pages/home.tmpl.html",
 		"./ui/html/partials/nav.tmpl.html",
+		"./ui/html/pages/guards.tmpl.html",
+		"./ui/html/pages/centres.tmpl.html",
 	}
 
 	ts, err := template.ParseFiles(files...)
@@ -46,22 +47,82 @@ func search(w http.ResponseWriter, r *http.Request) {
 	fmt.Println(search)
 }
 
-func snippetView(w http.ResponseWriter, r *http.Request) {
-	id, err := strconv.Atoi(r.URL.Query().Get("id"))
-	if err != nil || id < 1 {
-		http.NotFound(w, r)
-		return
+func guards(w http.ResponseWriter, r *http.Request) {
+	files := []string{
+		"./ui/html/base.tmpl.html",
+		"./ui/html/pages/home.tmpl.html",
+		"./ui/html/partials/nav.tmpl.html",
+		"./ui/html/pages/guards.tmpl.html",
+		"./ui/html/pages/centres.tmpl.html",
 	}
 
-	fmt.Fprintf(w, "Display a specific snippet with ID %d...", id)
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+		return
+	}
+	data, err := Guards()
+	if err != nil {
+		log.Print(err)
+	}
+	err = ts.ExecuteTemplate(w, "guards", data)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+	}
 }
 
-func snippetCreate(w http.ResponseWriter, r *http.Request) {
-	if r.Method != http.MethodPost {
-		w.Header().Set("Allow", http.MethodPost)
-		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
-		return
+func centres(w http.ResponseWriter, r *http.Request) {
+	files := []string{
+		"./ui/html/base.tmpl.html",
+		"./ui/html/pages/home.tmpl.html",
+		"./ui/html/partials/nav.tmpl.html",
+		"./ui/html/pages/guards.tmpl.html",
+		"./ui/html/pages/centres.tmpl.html",
+		"./ui/html/pages/forwards.tmpl.html",
 	}
 
-	w.Write([]byte("Create a new snippet..."))
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+		return
+	}
+	data, err := Centres()
+	if err != nil {
+		log.Print(err)
+	}
+	err = ts.ExecuteTemplate(w, "centres", data)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+	}
+}
+
+func forwards(w http.ResponseWriter, r *http.Request) {
+	files := []string{
+		"./ui/html/base.tmpl.html",
+		"./ui/html/pages/home.tmpl.html",
+		"./ui/html/partials/nav.tmpl.html",
+		"./ui/html/pages/guards.tmpl.html",
+		"./ui/html/pages/centres.tmpl.html",
+		"./ui/html/pages/forwards.tmpl.html",
+	}
+
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+		return
+	}
+	data, err := Forwards()
+	if err != nil {
+		log.Print(err)
+	}
+	err = ts.ExecuteTemplate(w, "forwards", data)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+	}
 }
