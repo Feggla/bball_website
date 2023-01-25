@@ -1,0 +1,24 @@
+{{define "searchtable"}}
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>{{template "title" .}} - NBA Project</title>
+        <link rel='stylesheet' href="../static/css/main.css">
+        <link rel='shortcut icon' href='../static/img/basketball.png' type='image/x-icon'>
+        <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700'>
+    </head>
+    <body>
+        <header>
+            <h1><a href='/'>NBA Project</a><img src="../static/img/basketball.png" style="float:inline-end;width:50;height:63px"></h1>
+        </header>
+            {{template "nav" .}}<div class="topnav">
+    <div class="search-container">
+        <form>
+        <input type="text" placeholder="Enter your basketball position..." name="search">
+        <button>Submit</button>
+        </form>
+    </div>
+    {{template "playertable" .}}
+</div>
+{{end}}

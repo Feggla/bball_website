@@ -1,0 +1,17 @@
+{{define "playertable"}}           
+<table class="table">
+    <tr>
+        <th>Full name</th>
+        <th>Position</th>
+        <th>Team</th>
+    </tr>
+    {{range .}}
+    <tr>
+        <th>{{.First_name}} {{.Last_name}}</th>
+        <th>{{.Position}}</th>
+        <th>{{.Team.Abbreviation}}</th>
+    </tr>
+    {{end}}
+</table>
+
+    {{end}}
