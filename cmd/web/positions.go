@@ -97,6 +97,37 @@ func GetAllPlayers() ([]Player, error) {
 	return players, nil
 }
 
+func GetPlayersByPosition(position string) ([]Player, error) {
+	var rtn []Player
+	all_players, err := GetAllPlayers()
+	if err != nil {
+		log.Println(err)
+		return []Player{}, err
+	}
+	for _, p := range all_players {
+		if p.Position == position {
+			rtn = append(rtn, p)
+
+		}
+
+	}
+	return rtn, nil
+}
+
+func PositionFromQuery(query string) string {
+	query = strings.ToLower(query)
+	if query == "g" || query == "guard" || query == "guards" || query == "guardians" {
+		return "G"
+	}
+	if query == "c" || query == "centre" || query == "centres" || query == "c-f" {
+		return "C"
+	}
+	if query == "f" || query == "forward" || query == "forwards" || query == "p-f" || query == "s-f" {
+		return "F"
+	}
+	return ""
+}
+
 func Guards() ([]Player, error) {
 	var guards []Player
 	all_players, err := GetAllPlayers()
