@@ -29,7 +29,7 @@ func home(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 	terms := r.FormValue("search")
-	position := PositionFromQuery(terms)
+	position := PosFromQuery(terms)
 	if position != "" {
 		data, err := GetPlayersByPosition(position)
 		if err != nil {

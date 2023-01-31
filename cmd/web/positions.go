@@ -114,18 +114,17 @@ func GetPlayersByPosition(position string) ([]Player, error) {
 	return rtn, nil
 }
 
-func PositionFromQuery(query string) string {
-	query = strings.ToLower(query)
-	if query == "g" || query == "guard" || query == "guards" || query == "guardians" {
+func PosFromQuery(query string) string {
+	switch strings.ToLower(query) {
+	case "g", "guard", "guards":
 		return "G"
-	}
-	if query == "c" || query == "centre" || query == "centres" || query == "c-f" {
+	case "c", "centre", "centres":
 		return "C"
-	}
-	if query == "f" || query == "forward" || query == "forwards" || query == "p-f" || query == "s-f" {
+	case "f", "forwards", "forward":
 		return "F"
+	default:
+		return ""
 	}
-	return ""
 }
 
 func Guards() ([]Player, error) {
