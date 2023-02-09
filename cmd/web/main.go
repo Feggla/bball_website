@@ -14,6 +14,7 @@ func main() {
 	mux.HandleFunc("/C", centres)
 	mux.HandleFunc("/Search?", search)
 	mux.HandleFunc("/F", forwards)
+	mux.HandleFunc("/users", users)
 
 	log.Print("Starting server on :4000")
 	err := http.ListenAndServe(":4000", mux)

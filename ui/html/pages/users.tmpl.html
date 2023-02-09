@@ -1,0 +1,16 @@
+{{define "users"}}
+<table class="table" id="usertab">
+    <tr>
+        <th>ID</th>
+        <th>Email</th>
+    </tr>
+    {{range .}}
+    <tr>
+        <th>{{.Id}}</th>
+        <th>{{.Username}}</th>
+    </tr>
+    {{end}}
+</table>
+
+</div>
+{{end}}

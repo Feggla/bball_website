@@ -1,0 +1,23 @@
+{{define "usertable"}}
+<!doctype html>
+<html lang='en'>
+    <head>
+        <meta charset='utf-8'>
+        <title>{{template "title" .}} - NBA Project</title>
+        <link rel='stylesheet' href="../static/css/main.css">
+        <link rel='shortcut icon' href='../static/img/basketball.png' type='image/x-icon'>
+        <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Ubuntu+Mono:400,700'>
+    </head>
+    <body>
+        <header>
+            <h1><a href='/'>NBA Project</a><img src="../static/img/basketball.png" style="float:inline-end;width:50;height:63px"></h1>
+        </header>
+            {{template "nav" .}}
+        <main> 
+            {{template "users" .}}
+            {{end}}        
+        </main>
+        <footer>Powered by <a href='https://golang.org/'>Go</a></footer>
+        <script src="../static/js/main.js" type="text/javascript"></script>
+    </body>
+</html>
