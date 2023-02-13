@@ -1,0 +1,20 @@
+{{define "fantasytable"}} 
+<table class="table">
+    <tr>
+        <th>Full name</th>
+        <th>Position</th>
+        <th>Team</th>
+        <th>Player ID</th>
+        <th>Add To Team</th>
+    </tr>
+    {{range .}}
+    <tr>
+        <td>{{.Player.FirstName}} {{.Player.LastName}}<td>
+        <td>{{.Player.Position}}</td>
+        <td>{{.Player.Team}}</td>
+        <td>{{.Player.Id}}</td>
+        <td><form><button action="/add" method="post" name="ID" value="{{.Player.Id}}">Add</button></form></td>
+    </tr>
+    {{end}}
+</table>
+    {{end}}

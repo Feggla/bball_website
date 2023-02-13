@@ -20,6 +20,9 @@ var files = []string{
 	"./ui/html/pages/searchtable.tmpl.html",
 	"./ui/html/pages/users.tmpl.html",
 	"./ui/html/pages/usertable.tmpl.html",
+	"./ui/html/pages/fantasy.tmpl.html",
+	"./ui/html/pages/fantasytable.tmpl.html",
+	"./ui/html/pages/myteam.tmpl.html",
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
@@ -143,7 +146,6 @@ func users(w http.ResponseWriter, r *http.Request) {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	err = db.Ping()
 	if err != nil {
 		log.Print(err)
 		panic(err)
@@ -193,4 +195,95 @@ func users(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, "Internal Server Error", 500)
 	}
 
+}
+func fantasy(w http.ResponseWriter, r *http.Request) {
+	res, err := url.Parse(r.URL.String())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	text := res.Query()
+	username := text.Get("user")
+	id := res.Query()
+	addId := id.Get("ID")
+	fmt.Println(username)
+	switch username {
+	case "":
+		fmt.Println("Empty string")
+		data, err := AllFantasyPlayers()
+		if err != nil {
+			log.Print(err)
+		}
+		ts, err := template.ParseFiles(files...)
+		if err != nil {
+			log.Print(err.Error())
+			http.Error(w, "Internal Server Error", 500)
+			return
+		}
+		err = ts.ExecuteTemplate(w, "fantasy", data)
+		if err != nil {
+			log.Print(err.Error())
+			http.Error(w, "Internal Server Error", 500)
+		}
+
+	default:
+		fmt.Println(addId)
+		data, err := AllFantasyPlayers()
+		if err != nil {
+			log.Print(err)
+		}
+		ts, err := template.ParseFiles(files...)
+		if err != nil {
+			log.Print(err.Error())
+			http.Error(w, "Internal Server Error", 500)
+			return
+		}
+		err = ts.ExecuteTemplate(w, "fantasy", data)
+		if err != nil {
+			log.Print(err.Error())
+			http.Error(w, "Internal Server Error", 500)
+		}
+
+	}
+}
+
+func myTeam(w http.ResponseWriter, r *http.Request) {
+	res, err := url.Parse(r.URL.String())
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	text := res.Query()
+	username := text.Get("user")
+	data, err := dbfantasy(username)
+	fmt.Println(username)
+	if err != nil {
+		log.Print(err)
+	}
+	ts, err := template.ParseFiles(files...)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+		return
+	}
+	err = ts.ExecuteTemplate(w, "myteam", data)
+	if err != nil {
+		log.Print(err.Error())
+		http.Error(w, "Internal Server Error", 500)
+	}
+
+}
+
+func addPlayer(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("method:", r.Method) //get request method
+	if r.Method == "post" {
+		r.ParseForm()
+		fmt.Println(r.Form["ID"])
+	} else {
+		r.ParseForm()
+		fmt.Println(r.Form["ID"])
+
+		// logic part of log in
+	}
 }

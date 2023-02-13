@@ -283,6 +283,7 @@ table {
     border: 1px solid #E4E5E7;
     border-collapse: collapse;
     width: 100%;
+    justify-items: center;
 }
 
 #usertab {
@@ -294,13 +295,10 @@ table {
 }
 
 td, th {
-    text-align: left;
+    width: 100%;
+    text-align: center;
     padding: 9px 18px;
-}
 
-th:last-child, td:last-child {
-    text-align: right;
-    color: #6A6C6F;
 }
 
 tr {
