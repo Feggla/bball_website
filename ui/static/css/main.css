@@ -295,14 +295,30 @@ table {
 }
 
 td, th {
-    width: 100%;
     text-align: center;
     padding: 9px 18px;
 
 }
 
+.topnav .login-container {
+    float: right;
+  }
+
 tr {
     border-bottom: 1px solid #E4E5E7;
+}
+
+#custom {
+    align-self: right;
+    align-items: right;
+    display: inline-block;
+    padding: 6px;
+    border: none;
+    margin-top: 8px;
+    margin-right: 0px;
+    font-size: 14px;
+
+
 }
 
 tr:nth-child(2n) {

@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"strconv"
 
 	_ "github.com/lib/pq"
 )
@@ -23,6 +24,7 @@ var files = []string{
 	"./ui/html/pages/fantasy.tmpl.html",
 	"./ui/html/pages/fantasytable.tmpl.html",
 	"./ui/html/pages/myteam.tmpl.html",
+	"./ui/html/pages/myteamtable.tmpl.html",
 }
 
 func home(w http.ResponseWriter, r *http.Request) {
@@ -196,22 +198,44 @@ func users(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
 func fantasy(w http.ResponseWriter, r *http.Request) {
-	res, err := url.Parse(r.URL.String())
+	cookie, err := r.Cookie("user")
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		username := ""
+		data, err := AllFantasyPlayers(username)
+		if err != nil {
+			log.Print(err)
+		}
+		ts, err := template.ParseFiles(files...)
+		if err != nil {
+			log.Print(err.Error())
+			http.Error(w, "Internal Server Error", 500)
+			return
+		}
+		err = ts.ExecuteTemplate(w, "fantasy", data)
+		if err != nil {
+			log.Print(err.Error())
+			http.Error(w, "Internal Server Error", 500)
+		}
+
 	}
-
-	text := res.Query()
-	username := text.Get("user")
-	id := res.Query()
-	addId := id.Get("ID")
-	fmt.Println(username)
-	switch username {
-	case "":
-		fmt.Println("Empty string")
-		data, err := AllFantasyPlayers()
+	username := cookie.Value
+	err = r.ParseForm()
+	if err != nil {
+		log.Print(err)
+	}
+	switch r.Method {
+	case "POST":
+		id := r.PostForm["addID"]
+		fmt.Println(id)
+		addId, err := strconv.Atoi(id[0])
+		if err != nil {
+			log.Print(err)
+		}
+		err = addPlayer(addId, username)
+		fmt.Println(err)
+		data, err := AllFantasyPlayers(username)
 		if err != nil {
 			log.Print(err)
 		}
@@ -226,10 +250,8 @@ func fantasy(w http.ResponseWriter, r *http.Request) {
 			log.Print(err.Error())
 			http.Error(w, "Internal Server Error", 500)
 		}
-
-	default:
-		fmt.Println(addId)
-		data, err := AllFantasyPlayers()
+	case "GET":
+		data, err := AllFantasyPlayers(username)
 		if err != nil {
 			log.Print(err)
 		}
@@ -244,46 +266,157 @@ func fantasy(w http.ResponseWriter, r *http.Request) {
 			log.Print(err.Error())
 			http.Error(w, "Internal Server Error", 500)
 		}
-
 	}
 }
 
 func myTeam(w http.ResponseWriter, r *http.Request) {
-	res, err := url.Parse(r.URL.String())
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	text := res.Query()
-	username := text.Get("user")
-	data, err := dbfantasy(username)
-	fmt.Println(username)
+	err := r.ParseForm()
 	if err != nil {
 		log.Print(err)
 	}
-	ts, err := template.ParseFiles(files...)
+	cookie, err := r.Cookie("user")
 	if err != nil {
-		log.Print(err.Error())
-		http.Error(w, "Internal Server Error", 500)
-		return
-	}
-	err = ts.ExecuteTemplate(w, "myteam", data)
-	if err != nil {
-		log.Print(err.Error())
-		http.Error(w, "Internal Server Error", 500)
-	}
+		res, err := url.Parse(r.URL.String())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		text := res.Query()
+		username := text.Get("user")
+		name, err := dbCheckLog(username)
+		if err != nil {
+			log.Print(err)
+		}
+		fmt.Println(username)
 
-}
-
-func addPlayer(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("method:", r.Method) //get request method
-	if r.Method == "post" {
-		r.ParseForm()
-		fmt.Println(r.Form["ID"])
+		switch name {
+		case "":
+			fmt.Println("Username not found in db")
+			ts, err := template.ParseFiles(files...)
+			if err != nil {
+				log.Print(err.Error())
+				http.Error(w, "Internal Server Error", 500)
+				return
+			}
+			err = ts.ExecuteTemplate(w, "myteam", nil)
+			if err != nil {
+				log.Print(err.Error())
+				http.Error(w, "Internal Server Error", 500)
+			}
+		default:
+			switch r.Method {
+			case "POST":
+				id := r.PostForm["removeid"]
+				fmt.Println(id)
+				addId, err := strconv.Atoi(id[0])
+				if err != nil {
+					log.Print(err)
+				}
+				err = removePlayer(addId, username)
+				if err != nil {
+					log.Print(err)
+				}
+				cookie := http.Cookie{Name: "user", Value: name}
+				http.SetCookie(w, &cookie)
+				data, err := dbfantasy(cookie.Value)
+				if err != nil {
+					log.Print(err)
+				}
+				fmt.Println(err)
+				ts, err := template.ParseFiles(files...)
+				if err != nil {
+					log.Print(err.Error())
+					http.Error(w, "Internal Server Error", 500)
+					return
+				}
+				err = ts.ExecuteTemplate(w, "myteam", data)
+				if err != nil {
+					log.Print(err.Error())
+					http.Error(w, "Internal Server Error", 500)
+				}
+			case "GET":
+				cookie := http.Cookie{Name: "user", Value: name}
+				http.SetCookie(w, &cookie)
+				data, err := dbfantasy(cookie.Value)
+				if err != nil {
+					log.Print(err)
+				}
+				fmt.Println(err)
+				ts, err := template.ParseFiles(files...)
+				if err != nil {
+					log.Print(err.Error())
+					http.Error(w, "Internal Server Error", 500)
+					return
+				}
+				err = ts.ExecuteTemplate(w, "myteam", data)
+				if err != nil {
+					log.Print(err.Error())
+					http.Error(w, "Internal Server Error", 500)
+				}
+			}
+		}
 	} else {
-		r.ParseForm()
-		fmt.Println(r.Form["ID"])
+		res, err := url.Parse(r.URL.String())
+		if err != nil {
+			http.Error(w, err.Error(), http.StatusInternalServerError)
+			return
+		}
+		text := res.Query()
+		username := text.Get("user")
+		name, _ := dbCheckLog(username)
+		if name == "" {
+			username = cookie.Value
+		}
+		switch r.Method {
+		case "POST":
+			id := r.PostForm["removeid"]
+			fmt.Println(id)
+			addId, err := strconv.Atoi(id[0])
+			if err != nil {
+				log.Print(err)
+			}
+			err = removePlayer(addId, username)
+			if err != nil {
+				log.Print(err)
+			}
+			cookie := http.Cookie{Name: "user", Value: username}
+			http.SetCookie(w, &cookie)
+			data, err := dbfantasy(cookie.Value)
+			if err != nil {
+				log.Print(err)
+			}
+			fmt.Println(err)
+			ts, err := template.ParseFiles(files...)
+			if err != nil {
+				log.Print(err.Error())
+				http.Error(w, "Internal Server Error", 500)
+				return
+			}
+			err = ts.ExecuteTemplate(w, "myteam", data)
+			if err != nil {
+				log.Print(err.Error())
+				http.Error(w, "Internal Server Error", 500)
+			}
+		case "GET":
+			cookie := http.Cookie{Name: "user", Value: username}
+			http.SetCookie(w, &cookie)
+			data, err := dbfantasy(cookie.Value)
+			if err != nil {
+				log.Print(err)
+			}
+			fmt.Println(err)
+			ts, err := template.ParseFiles(files...)
+			if err != nil {
+				log.Print(err.Error())
+				http.Error(w, "Internal Server Error", 500)
+				return
+			}
+			err = ts.ExecuteTemplate(w, "myteam", data)
+			if err != nil {
+				log.Print(err.Error())
+				http.Error(w, "Internal Server Error", 500)
+			}
 
-		// logic part of log in
+		}
 	}
 }

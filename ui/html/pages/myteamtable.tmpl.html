@@ -1,11 +1,11 @@
-{{define "fantasytable"}} 
+{{define "myteamtable"}} 
 <table class="table">
     <tr>
         <th>Full name</th>
         <th>Position</th>
         <th>Team</th>
         <th>Player ID</th>
-        <th>Add To Team</th>
+        <th>Remove Player</th>
     </tr>
     {{range .}}
     <tr>
@@ -15,7 +15,7 @@
         <td>{{.Player.Id}}</td>
         <td>
             <form method="POST" action="">
-                <button type="submit" name="addID" value="{{.Player.Id}}">Add</button>
+                <button type="submit" name="removeid" value="{{.Player.Id}}">Remove</button>
             </form>        
         </td>
     </tr>
