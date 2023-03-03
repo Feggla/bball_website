@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"os"
 	"strconv"
 
 	_ "github.com/lib/pq"
@@ -134,11 +135,11 @@ func forwards(w http.ResponseWriter, r *http.Request) {
 }
 
 func users(w http.ResponseWriter, r *http.Request) {
-	const (
-		host     = "localhost"
-		user     = "newuser"
-		password = "password"
-		dbname   = "postgres"
+	var (
+		host     = os.Getenv("host")
+		user     = os.Getenv("user")
+		password = os.Getenv("password")
+		dbname   = os.Getenv("dbname")
 	)
 
 	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s sslmode=disable", user, dbname, password, host)
