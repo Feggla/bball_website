@@ -4,15 +4,16 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+	"os"
 
 	_ "github.com/lib/pq"
 )
 
 const (
-	host     = "localhost"
-	user     = "newuser"
-	password = "password"
-	dbname   = "postgres"
+	host     = os.Getenv(host)
+	user     = os.Getenv(user)
+	password = os.Getenv(password)
+	dbname   = os.Getenv(dbname)
 )
 
 type Fantasydb struct {
@@ -75,7 +76,7 @@ func Dbread() {
 
 }
 
-func dbfantasy(query string) ([]Fantasydb, error) {
+func dbfantasy(username string) ([]Fantasydb, error) {
 	var fantasy []Fantasydb
 
 	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s sslmode=disable", user, dbname, password, host)
@@ -85,14 +86,14 @@ func dbfantasy(query string) ([]Fantasydb, error) {
 	}
 	defer db.Close()
 
-	// a := `
-	// SELECT users.username, player.first_name, player.last_name, player.position, player.team, player.player_id
-	// FROM fantasy
-	// JOIN users ON users.users_id = fantasy.user
-	// JOIN player ON player.player_id = fantasy.player WHERE users.username = '$1'`
+	a := `
+	SELECT users.username, player.first_name, player.last_name, player.position, player.team, player.player_id
+	FROM fantasy
+	JOIN users ON users.id = fantasy.user_id
+	JOIN player ON player.player_id = fantasy.player_id WHERE users.username = $1`
 
-	querystring := fmt.Sprintf("SELECT users.username, player.first_name, player.last_name, player.position, player.team, player.player_id  FROM fantasy JOIN users ON users.id = fantasy.user_id JOIN player ON player.player_id = fantasy.player_id WHERE users.username = '%s'", query)
-	rows, err := db.Query(querystring)
+	// querystring := fmt.Sprintf("SELECT users.username, player.first_name, player.last_name, player.position, player.team, player.player_id  FROM fantasy JOIN users ON users.id = fantasy.user_id JOIN player ON player.player_id = fantasy.player_id WHERE users.username = '%s'", query)
+	rows, err := db.Query(a, username)
 	if err != nil {
 		return []Fantasydb{}, err
 	}
