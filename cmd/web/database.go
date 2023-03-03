@@ -9,11 +9,11 @@ import (
 	_ "github.com/lib/pq"
 )
 
-const (
-	host     = os.Getenv(host)
-	user     = os.Getenv(user)
-	password = os.Getenv(password)
-	dbname   = os.Getenv(dbname)
+var (
+	host     = os.Getenv("host")
+	user     = os.Getenv("user")
+	password = os.Getenv("password")
+	dbname   = os.Getenv("dbname")
 )
 
 type Fantasydb struct {
