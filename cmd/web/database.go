@@ -158,9 +158,10 @@ func Dbadd() {
 	}
 }
 
-func dbCheckLog(userid string) (string, error) {
-	var usernames []string
+func dbCheckLog(userid string, password string) (string, error) {
+	var usernames = make(map[string]string)
 	var name string
+	var pass string
 	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s sslmode=disable", user, dbname, password, host)
 	// Connect to database
 	db, err := sql.Open("postgres", connStr)
@@ -168,21 +169,21 @@ func dbCheckLog(userid string) (string, error) {
 		log.Fatal(err)
 	}
 	defer db.Close()
-	querystring := "SELECT username FROM users"
+	querystring := "SELECT username, password FROM users"
 	rows, err := db.Query(querystring)
 	if err != nil {
 		return "", err
 	}
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&name)
-		usernames = append(usernames, name)
+		err := rows.Scan(&name, &pass)
+		usernames[name] = pass
 		if err != nil {
 			return "", err
 		}
 	}
 	for _, x := range usernames {
-		if x == userid {
+		if x == userid && usernames[x] == password {
 			return x, nil
 		}
 	}

@@ -284,7 +284,8 @@ func myTeam(w http.ResponseWriter, r *http.Request) {
 		}
 		text := res.Query()
 		username := text.Get("user")
-		name, err := dbCheckLog(username)
+		pass := text.Get("pass_input")
+		name, err := dbCheckLog(username, pass)
 		if err != nil {
 			log.Print(err)
 		}
@@ -364,7 +365,8 @@ func myTeam(w http.ResponseWriter, r *http.Request) {
 		}
 		text := res.Query()
 		username := text.Get("user")
-		name, _ := dbCheckLog(username)
+		password := text.Get("pass_input")
+		name, _ := dbCheckLog(username, password)
 		if name == "" {
 			username = cookie.Value
 		}

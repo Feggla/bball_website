@@ -91,17 +91,25 @@ nav {
     padding-top: 17px;
     padding-bottom: 15px;
     background: #F7F9FA;
-    height: 60px;
     color: #6A6C6F;
+}
+
+ul {
+    margin: 0;
 }
 
 nav a {
     margin-right: 1.5em;
-    display: inline-block;
+    display: block;
+}
+
+nav li {
+    float: left;
+    list-style-type: none;
 }
 
 nav form {
-    display: inline-block;
+    display: block;
     margin-left: 1.5em;
 }
 

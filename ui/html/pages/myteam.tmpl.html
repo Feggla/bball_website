@@ -11,10 +11,24 @@
     <body>
         <header>
             <h1><a href='/'>NBA Project</a><img src="../static/img/basketball.png" style="float:inline-end;width:50;height:63px">            
-                <form id="custom">
+                <!-- <form id="custom">
                 <input type="text" placeholder="Enter email username to log in" name="user">
                 <button>Submit</button>           
-                </form> </h1>
+                </form>  -->
+            </h1>
+
+            <h1>  
+                <form id="custom">
+                   <div>
+                   <input type="text" placeholder="Enter login email" name="user">
+                   <input type="text" placeholder="Password" name="pass_input">
+                   <div>
+                   <button><span>Log In</span></button>           
+                </div>
+                </div>
+          
+               </form> 
+             </h1>
         </header>
             {{template "nav" .}}
         <main> 
