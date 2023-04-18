@@ -159,7 +159,7 @@ func users(w http.ResponseWriter, r *http.Request) {
 	var (
 		userID int64
 		name   string
-		passw   string
+		passw  string
 	)
 	type userind struct {
 		Id       int64
