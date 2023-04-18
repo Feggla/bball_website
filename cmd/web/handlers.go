@@ -159,7 +159,7 @@ func users(w http.ResponseWriter, r *http.Request) {
 	var (
 		userID int64
 		name   string
-		pass   string
+		passw   string
 	)
 	type userind struct {
 		id       int64
@@ -173,18 +173,15 @@ func users(w http.ResponseWriter, r *http.Request) {
 	var users []userind
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&userID, &name, &pass)
+		err := rows.Scan(&userID, &name, &passw)
 		if err != nil {
 			panic(err)
 		}
 		users = append(users, userind{
 			id:       userID,
 			username: name,
-			password: pass,
+			password: passw,
 		})
-
-		fmt.Println(users)
-		fmt.Println("\n", userID, name)
 	}
 	err = rows.Err()
 	if err != nil {
