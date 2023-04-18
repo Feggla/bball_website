@@ -143,14 +143,6 @@ func users(w http.ResponseWriter, r *http.Request) {
 		dbname   = os.Getenv("dbname")
 	)
 
-	// var (
-	// 	host     = "postgres://ball_user:lzzGzp3WhYqjvHdJUyJRtdusThr554E4@dpg-cg0lqs82qv2bfoqeu3gg-a.singapore-postgres.render.com/ball"
-	// 	user     = "ball_user"
-	// 	password = "lzzGzp3WhYqjvHdJUyJRtdusThr554E4"
-	// 	dbname   = "ball"
-	// 	dbport   = 5432
-	// )
-
 	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s sslmode=disable", user, dbname, password, host)
 	// Connect to database
 	db, err := sql.Open("postgres", connStr)
@@ -167,12 +159,14 @@ func users(w http.ResponseWriter, r *http.Request) {
 	var (
 		userID int64
 		name   string
+		pass   string
 	)
 	type userind struct {
-		Id       int64
-		Username string
+		id       int64
+		username string
+		password string
 	}
-	rows, err := db.Query("SELECT id, username FROM users order by id asc")
+	rows, err := db.Query("SELECT id, username, password FROM users order by id asc")
 	if err != nil {
 		panic(err)
 	}
@@ -184,8 +178,9 @@ func users(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 		users = append(users, userind{
-			Id:       userID,
-			Username: name,
+			id:       userID,
+			username: name,
+			password: pass,
 		})
 
 		fmt.Println(users)

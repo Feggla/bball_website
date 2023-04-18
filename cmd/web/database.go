@@ -17,14 +17,6 @@ var (
 	dbname   = os.Getenv("dbname")
 )
 
-// var (
-// 	host     = "postgres://ball_user:lzzGzp3WhYqjvHdJUyJRtdusThr554E4@dpg-cg0lqs82qv2bfoqeu3gg-a.singapore-postgres.render.com/ball"
-// 	user     = "Ball_user"
-// 	password = "lzzGzp3WhYqjvHdJUyJRtdusThr554E4"
-// 	dbname   = "ball"
-// 	dbport   = 5432
-// )
-
 type Fantasydb struct {
 	Player struct {
 		FantasyPlayer string
