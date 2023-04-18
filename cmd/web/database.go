@@ -4,7 +4,6 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-
 	"os"
 
 	_ "github.com/lib/pq"
@@ -90,14 +89,14 @@ func dbfantasy(username string) ([]Fantasydb, error) {
 	}
 	defer db.Close()
 
-	a := `
-	SELECT users.username, player.first_name, player.last_name, player.position, player.team, player.player_id
-	FROM fantasy
-	JOIN users ON users.id = fantasy.user_id
-	JOIN player ON player.player_id = fantasy.player_id WHERE users.username = $1`
+	// a := `
+	// SELECT users.username, player.first_name, player.last_name, player.position, player.team, player.player_id
+	// FROM fantasy
+	// JOIN users ON users.id = fantasy.user_id
+	// JOIN player ON player.player_id = fantasy.player_id WHERE users.username = $1`
 
-	// querystring := fmt.Sprintf("SELECT users.username, player.first_name, player.last_name, player.position, player.team, player.player_id  FROM fantasy JOIN users ON users.id = fantasy.user_id JOIN player ON player.player_id = fantasy.player_id WHERE users.username = '%s'", query)
-	rows, err := db.Query(a, username)
+	querystring := fmt.Sprintf("SELECT users.username, player.first_name, player.last_name, player.position, player.team, player.player_id  FROM fantasy JOIN users ON users.id = fantasy.user_id JOIN player ON player.player_id = fantasy.player_id WHERE users.username = '%s'", username)
+	rows, err := db.Query(querystring)
 	if err != nil {
 		return []Fantasydb{}, err
 	}
@@ -165,8 +164,8 @@ func Dbadd() {
 func dbCheckLog(userid string, password string) (string, error) {
 
 	var (
-		name   string
-		pass   string
+		name string
+		pass string
 	)
 	type userind struct {
 		username string
@@ -199,7 +198,7 @@ func dbCheckLog(userid string, password string) (string, error) {
 			return "", err
 		}
 	}
-	for _,x := range users {
+	for _, x := range users {
 		if x.username == userid && x.password == password {
 			return x.username, nil
 		}
