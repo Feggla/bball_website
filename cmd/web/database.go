@@ -186,7 +186,7 @@ func dbCheckLog(userid string, password string) (string, error) {
 			return "", err
 		}
 	}
-	for _, x := range usernames {
+	for x := range usernames {
 		if x == userid && usernames[x] == password {
 			return x, nil
 		}

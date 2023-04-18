@@ -173,7 +173,7 @@ func users(w http.ResponseWriter, r *http.Request) {
 	var users []userind
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&userID, &name)
+		err := rows.Scan(&userID, &name, &pass)
 		if err != nil {
 			panic(err)
 		}
