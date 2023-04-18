@@ -162,9 +162,9 @@ func users(w http.ResponseWriter, r *http.Request) {
 		passw   string
 	)
 	type userind struct {
-		id       int64
-		username string
-		password string
+		Id       int64
+		Username string
+		Password string
 	}
 	rows, err := db.Query("SELECT id, username, password FROM users order by id asc")
 	if err != nil {
@@ -178,9 +178,9 @@ func users(w http.ResponseWriter, r *http.Request) {
 			panic(err)
 		}
 		users = append(users, userind{
-			id:       userID,
-			username: name,
-			password: passw,
+			Id:       userID,
+			Username: name,
+			Password: passw,
 		})
 	}
 	err = rows.Err()
