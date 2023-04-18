@@ -50,7 +50,7 @@ func Dbread() {
 	type userind struct {
 		id       int64
 		username string
-		password string
+		passw    string
 	}
 	rows, err := db.Query("SELECT id, username, password FROM users order by id desc")
 	if err != nil {
@@ -66,7 +66,7 @@ func Dbread() {
 		users = append(users, userind{
 			id:       userID,
 			username: name,
-			password: pass,
+			passw:    pass,
 		})
 
 		fmt.Println(users)
@@ -84,10 +84,12 @@ func dbfantasy(username string) ([]Fantasydb, error) {
 
 	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s sslmode=disable", user, dbname, password, host)
 	db, err := sql.Open("postgres", connStr)
+	fmt.Println(err)
 	if err != nil {
 		return []Fantasydb{}, err
 	}
 	defer db.Close()
+	fmt.Println("db open")
 
 	// a := `
 	// SELECT users.username, player.first_name, player.last_name, player.position, player.team, player.player_id
