@@ -286,12 +286,12 @@ func myTeam(w http.ResponseWriter, r *http.Request) {
 		text := res.Query()
 		username := text.Get("user")
 		pass := text.Get("pass_input")
+		fmt.Println(username)
+		fmt.Println(pass)
 		name, err := dbCheckLog(username, pass)
 		if err != nil {
 			log.Print(err)
 		}
-		fmt.Println(username)
-
 		switch name {
 		case "":
 			fmt.Println("Username not found in db")
