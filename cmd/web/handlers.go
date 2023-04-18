@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+
 	"os"
 	"strconv"
 
@@ -141,6 +142,14 @@ func users(w http.ResponseWriter, r *http.Request) {
 		password = os.Getenv("password")
 		dbname   = os.Getenv("dbname")
 	)
+
+	// var (
+	// 	host     = "postgres://ball_user:lzzGzp3WhYqjvHdJUyJRtdusThr554E4@dpg-cg0lqs82qv2bfoqeu3gg-a.singapore-postgres.render.com/ball"
+	// 	user     = "ball_user"
+	// 	password = "lzzGzp3WhYqjvHdJUyJRtdusThr554E4"
+	// 	dbname   = "ball"
+	// 	dbport   = 5432
+	// )
 
 	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s sslmode=disable", user, dbname, password, host)
 	// Connect to database

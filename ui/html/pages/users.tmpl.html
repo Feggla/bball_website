@@ -3,11 +3,13 @@
     <tr>
         <th>ID</th>
         <th>Email</th>
+        <th>Password</th>
     </tr>
     {{range .}}
     <tr>
         <th>{{.Id}}</th>
         <th>{{.Username}}</th>
+        <th>{{.Password}}</th>
     </tr>
     {{end}}
 </table>

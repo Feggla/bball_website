@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
+
 	"os"
 
 	_ "github.com/lib/pq"
@@ -15,6 +16,14 @@ var (
 	password = os.Getenv("password")
 	dbname   = os.Getenv("dbname")
 )
+
+// var (
+// 	host     = "postgres://ball_user:lzzGzp3WhYqjvHdJUyJRtdusThr554E4@dpg-cg0lqs82qv2bfoqeu3gg-a.singapore-postgres.render.com/ball"
+// 	user     = "Ball_user"
+// 	password = "lzzGzp3WhYqjvHdJUyJRtdusThr554E4"
+// 	dbname   = "ball"
+// 	dbport   = 5432
+// )
 
 type Fantasydb struct {
 	Player struct {
@@ -45,25 +54,28 @@ func Dbread() {
 	var (
 		userID int64
 		name   string
+		pass   string
 	)
 	type userind struct {
 		id       int64
 		username string
+		password string
 	}
-	rows, err := db.Query("SELECT id, username FROM users order by id desc")
+	rows, err := db.Query("SELECT id, username, password FROM users order by id desc")
 	if err != nil {
 		panic(err)
 	}
 	var users []userind
 	defer rows.Close()
 	for rows.Next() {
-		err := rows.Scan(&userID, &name)
+		err := rows.Scan(&userID, &name, &pass)
 		if err != nil {
 			panic(err)
 		}
 		users = append(users, userind{
 			id:       userID,
 			username: name,
+			password: pass,
 		})
 
 		fmt.Println(users)
