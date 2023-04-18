@@ -163,7 +163,7 @@ func Dbadd() {
 	}
 }
 
-func dbCheckLog(userid string, password string) (string, error) {
+func dbCheckLog(userid string, passw string) (string, error) {
 
 	var (
 		name string
@@ -201,7 +201,8 @@ func dbCheckLog(userid string, password string) (string, error) {
 		}
 	}
 	for _, x := range users {
-		if x.username == userid && x.password == password {
+		fmt.Println(x.username)
+		if x.username == userid && x.password == passw {
 			return x.username, nil
 		}
 	}
