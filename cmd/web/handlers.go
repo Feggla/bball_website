@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"net/url"
+	"encoding/json"
 
 	"os"
 	"strconv"
@@ -424,3 +425,15 @@ func myTeam(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
+func apiMyTeam(w http.ResponseWriter, r *http.Request) {
+
+	data, err := dbfantasy("michaelfeggans@gmail.com")
+	if err != nil {
+		log.Print(err)
+	}
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusCreated)
+	json.NewEncoder(w).Encode(data)
+}
+
+func players(w http.ResponseWriter, r *http.Request)

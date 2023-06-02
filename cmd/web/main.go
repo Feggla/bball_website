@@ -17,6 +17,8 @@ func main() {
 	mux.HandleFunc("/users", users)
 	mux.HandleFunc("/fantasyteam", fantasy)
 	mux.HandleFunc("/myteam", myTeam)
+	mux.HandleFunc("/api/players", players)
+	mux.HandleFunc("/api/myTeam", apiMyTeam)
 
 	log.Print("Starting server on :4000")
 	err := http.ListenAndServe(":4000", mux)
