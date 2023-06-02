@@ -243,3 +243,38 @@ func removePlayer(playerid int, username string) error {
 	fmt.Println(x)
 	return nil
 }
+
+func allFantasy() ([]Fantasydb, error) {
+	var fantasy []Fantasydb
+
+	connStr := fmt.Sprintf("user=%s dbname=%s password=%s host=%s sslmode=disable", user, dbname, password, host)
+	db, err := sql.Open("postgres", connStr)
+	fmt.Println(err)
+	if err != nil {
+		return []Fantasydb{}, err
+	}
+	defer db.Close()
+	fmt.Println("db open")
+
+	// a := `
+	// SELECT users.username, player.first_name, player.last_name, player.position, player.team, player.player_id
+	// FROM fantasy
+	// JOIN users ON users.id = fantasy.user_id
+	// JOIN player ON player.player_id = fantasy.player_id WHERE users.username = $1`
+
+	querystring := "SELECT users.username, player.first_name, player.last_name, player.position, player.team, player.player_id  FROM fantasy JOIN users ON users.id = fantasy.user_id JOIN player ON player.player_id = fantasy.player_id"
+	rows, err := db.Query(querystring)
+	if err != nil {
+		return []Fantasydb{}, err
+	}
+	defer rows.Close()
+	var fantdata Fantasydb
+	for rows.Next() {
+		err := rows.Scan(&fantdata.Player.FantasyPlayer, &fantdata.Player.FirstName, &fantdata.Player.LastName, &fantdata.Player.Position, &fantdata.Player.Team, &fantdata.Player.Id)
+		if err != nil {
+			return []Fantasydb{}, err
+		}
+		fantasy = append(fantasy, fantdata)
+	}
+	return fantasy, nil
+}

@@ -427,7 +427,7 @@ func myTeam(w http.ResponseWriter, r *http.Request) {
 }
 func apiMyTeam(w http.ResponseWriter, r *http.Request) {
 
-	data, err := dbfantasy("michaelfeggans@gmail.com")
+	data, err := allFantasy()
 	if err != nil {
 		log.Print(err)
 	}
