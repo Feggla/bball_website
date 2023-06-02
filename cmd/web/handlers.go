@@ -436,4 +436,4 @@ func apiMyTeam(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(data)
 }
 
-func players(w http.ResponseWriter, r *http.Request)
+// func players(w http.ResponseWriter, r *http.Request)
