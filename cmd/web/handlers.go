@@ -2,12 +2,12 @@ package main
 
 import (
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"html/template"
 	"log"
 	"net/http"
 	"net/url"
-	"encoding/json"
 
 	"os"
 	"strconv"
@@ -431,9 +431,13 @@ func apiMyTeam(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		log.Print(err)
 	}
+	for x, _ := range data {
+		json.NewEncoder(w).Encode(x)
+	}
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
 	json.NewEncoder(w).Encode(data)
+
 }
 
 // func players(w http.ResponseWriter, r *http.Request)
