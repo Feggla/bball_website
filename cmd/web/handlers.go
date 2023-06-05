@@ -426,14 +426,43 @@ func myTeam(w http.ResponseWriter, r *http.Request) {
 	}
 }
 func apiMyTeam(w http.ResponseWriter, r *http.Request) {
+	var teamName = r.FormValue("team")
+	type data struct {
+		fantasyPlayer struct {
+			player struct {
+				firstName string
+				lastName string
+				position string
+				team string
+				Id int
+			}
+		}
+	}
 
-	data, err := allFantasy()
+	type myTeamRes struct {
+		Players []struct {
+			FirstName string
+			LastName string
+			Position string
+			Team string
+			Id int
+		}
+		TeamName string
+	}
+
+
+	info, err := AllFantasyPlayers(teamName)
 	if err != nil {
 		log.Print(err)
 	}
+	// for _,x := range info {
+	// 	players.fantasyPlayer = x.Player.FantasyPlayer {}
+	// }
+
+
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(data)
+	json.NewEncoder(w).Encode(info)
 }
 
 // func players(w http.ResponseWriter, r *http.Request)
